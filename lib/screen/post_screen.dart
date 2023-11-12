@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:social_media_app/controller/navigation_controller.dart';
 import 'package:social_media_app/controller/post_controller.dart';
 import 'package:social_media_app/model/post_model.dart';
 
@@ -52,7 +53,7 @@ class _PostScreenState extends State<PostScreen> {
             }).catchError((error) {
               showToast('$error');
             });
-            Navigator.pop(context);
+           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const NavigationScreen()));
             _descriptionController.text = '';
           });
         },

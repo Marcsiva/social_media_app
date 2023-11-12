@@ -1,9 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
+import 'package:social_media_app/main.dart';
 import '../controller/google_auth_controller.dart';
-import 'home_screen.dart';
 
 
 class LoginScreen extends StatefulWidget {
@@ -121,7 +120,7 @@ class _LoginScreenState extends State<LoginScreen> {
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
-            builder: (context) => const HomeScreen(),
+            builder: (context) => const UserDeciderScreen(),
           ),
               (route) => false,
         );
@@ -140,9 +139,9 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
-  void showToast(String messsage, bool isFailure) {
+  void showToast(String message, bool isFailure) {
     Fluttertoast.showToast(
-      msg: messsage,
+      msg: message,
       toastLength: Toast.LENGTH_LONG,
       gravity: ToastGravity.SNACKBAR,
       backgroundColor: isFailure ? Colors.red : Colors.green,

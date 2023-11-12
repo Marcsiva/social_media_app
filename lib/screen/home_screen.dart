@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:social_media_app/screen/post_screen.dart';
+// import 'package:social_media_app/screen/post_screen.dart';
 
 import '../controller/post_controller.dart';
 import '../model/post_model.dart';
@@ -45,15 +45,15 @@ class _HomeScreenState extends State<HomeScreen> {
               });
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const PostScreen()),
-          );
-        },
-        child: const Icon(Icons.add_circle_outline_rounded),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     Navigator.push(
+      //       context,
+      //       MaterialPageRoute(builder: (context) => const PostScreen()),
+      //     );
+      //   },
+      //   child: const Icon(Icons.add_circle_outline_rounded),
+      // ),
     );
   }
 }

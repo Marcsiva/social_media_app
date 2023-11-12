@@ -11,13 +11,7 @@ class PostController {
     await postCollection.doc(collect.id).set(collect.toJson());
   }
 
-  // Stream<List<PostModel>> fetchAllPosts() {
-  //   return postCollection.snapshots().map((snapshot) {
-  //     return snapshot.docs.map((document) {
-  //       return PostModel.fromJson(document);
-  //     }).toList();
-  //   });
-  // }
+
 
   Stream<List<PostModel>> fetchPost (String uid){
     return postCollection.where("uid",isEqualTo: uid).snapshots().map((snapshot) {
