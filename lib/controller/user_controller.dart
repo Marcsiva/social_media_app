@@ -18,4 +18,13 @@ class UserController{
     return null;
   }
 
+  Future<void> updateUser(UserModel userData) async{
+    try{
+      await userCollection.doc(userData.id).update(userData.tojson());
+    }
+    catch(e){
+      print('$e');
+    }
+  }
+
 }

@@ -23,14 +23,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
         forceMaterialTransparency: true,
         title: const Text(
           'Profile',
-          style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold),
+          style: TextStyle(
+              color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
         ),
       ),
       body: Column(
         children: [
           FutureBuilder<UserModel?>(
               future: _userController.fetchUser(
-                FirebaseAuth.instance.currentUser!.uid
+                FirebaseAuth.instance.currentUser?.uid ?? ""
               ),
               builder:(context,snapshot){
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -44,9 +45,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   return Column(
                     children: [
                       GestureDetector(
-                        onTap:(){
+                        onTap: () {
                           setState(() {
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=> const UserRegisterScreen()));
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        UserRegisterScreen(editModel: user)));
                           });
                         },
                         child: Padding(
@@ -54,14 +59,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           child: Row(
                             children: [
                               CircleAvatar(
-                                radius:30,
-                                backgroundImage: NetworkImage(FirebaseAuth.instance.currentUser?.photoURL?? ""),),
-                              const SizedBox(width: 15,),
+                                radius: 30,
+                                backgroundImage: NetworkImage(FirebaseAuth
+                                        .instance.currentUser?.photoURL ??
+                                    ""),
+                              ),
+                              const SizedBox(
+                                width: 15,
+                              ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(user.username),
-                                  Text(user.email)
+                                  Text(user.description as String)
                                 ],
                               )
                             ],
@@ -71,8 +81,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ],
                   );
                 }
-              }
-          ),
+              }),
           // Row(
           //   children: [
           //     Padding(
@@ -101,17 +110,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
           //     )
           //   ],
           // ),
-
           const SizedBox(
             height: 20,
           ),
           ListTile(
             title: const Text("signout"),
             trailing: const Icon(Icons.logout_outlined),
-            onTap: (){
+            onTap: () {
               setState(() {
                 _authController.signOut(context);
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const LoginScreen()));
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const LoginScreen()));
               });
             },
           )

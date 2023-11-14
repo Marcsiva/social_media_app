@@ -1,12 +1,16 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:social_media_app/controller/navigation_controller.dart';
 import 'package:social_media_app/controller/user_controller.dart';
 import 'package:social_media_app/main.dart';
 import 'package:social_media_app/model/user_model.dart';
 
 class UserRegisterScreen extends StatefulWidget {
-  const UserRegisterScreen({super.key});
+  UserModel? editModel;
+  UserRegisterScreen({super.key, this.editModel});
 
   @override
   State<UserRegisterScreen> createState() => _UserRegisterScreenState();
@@ -22,9 +26,19 @@ class _UserRegisterScreenState extends State<UserRegisterScreen> {
 
   @override
   void initState() {
-    _userNameController.text = FirebaseAuth.instance.currentUser?.displayName ?? "";
-    _emailController.text = FirebaseAuth.instance.currentUser?.email??"";
-    _phoneNumberController.text = FirebaseAuth.instance.currentUser?.phoneNumber ?? "";
+    if (widget.editModel != null) {
+      var userEditModel = widget.editModel!;
+      _userNameController.text = userEditModel.username;
+      _emailController.text = userEditModel.email;
+      _phoneNumberController.text = userEditModel.phonenumber;
+      _descriptionController.text = userEditModel.description as String;
+    } else {
+      _userNameController.text =
+          FirebaseAuth.instance.currentUser?.displayName ?? "";
+      _emailController.text = FirebaseAuth.instance.currentUser?.email ?? "";
+      _phoneNumberController.text =
+          FirebaseAuth.instance.currentUser?.phoneNumber ?? "";
+    }
     super.initState();
   }
 
@@ -34,9 +48,7 @@ class _UserRegisterScreenState extends State<UserRegisterScreen> {
       appBar: AppBar(
         forceMaterialTransparency: true,
       ),
-      body:
-
-      SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Form(
           key: _validateKey,
           child: Column(
@@ -49,8 +61,7 @@ class _UserRegisterScreenState extends State<UserRegisterScreen> {
                 child: CircleAvatar(
                   radius: 40,
                   backgroundImage: NetworkImage(
-                    FirebaseAuth.instance.currentUser?.photoURL ?? ""
-                  ),
+                      FirebaseAuth.instance.currentUser?.photoURL ?? ""),
                 ),
               ),
               const SizedBox(
@@ -61,7 +72,9 @@ class _UserRegisterScreenState extends State<UserRegisterScreen> {
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
                   children: [
-                    const Icon(Icons.person, ),
+                    const Icon(
+                      Icons.person,
+                    ),
                     const SizedBox(
                       width: 10,
                     ),
@@ -69,13 +82,14 @@ class _UserRegisterScreenState extends State<UserRegisterScreen> {
                       flex: 3,
                       child: TextFormField(
                         controller: _userNameController,
-                        style: const TextStyle(fontSize: 16,fontWeight: FontWeight.w500),
+                        style: const TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w500),
                         decoration: const InputDecoration(
                           labelText: "User Name",
                           labelStyle: TextStyle(fontSize: 15),
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -91,7 +105,8 @@ class _UserRegisterScreenState extends State<UserRegisterScreen> {
                       flex: 3,
                       child: TextFormField(
                         controller: _emailController,
-                        style: const TextStyle(fontSize: 16,fontWeight: FontWeight.w500),
+                        style: const TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w500),
                         decoration: const InputDecoration(
                           labelText: "Email",
                           labelStyle: TextStyle(fontSize: 15),
@@ -113,7 +128,8 @@ class _UserRegisterScreenState extends State<UserRegisterScreen> {
                       flex: 3,
                       child: TextFormField(
                         controller: _phoneNumberController,
-                        style: const TextStyle(fontSize: 16,fontWeight: FontWeight.w500),
+                        style: const TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w500),
                         decoration: const InputDecoration(
                           labelText: "Phone Number",
                           labelStyle: TextStyle(fontSize: 15),
@@ -135,7 +151,8 @@ class _UserRegisterScreenState extends State<UserRegisterScreen> {
                       flex: 3,
                       child: TextFormField(
                         controller: _descriptionController,
-                        style: const TextStyle(fontSize: 16,fontWeight: FontWeight.w500),
+                        style: const TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w500),
                         decoration: const InputDecoration(
                           labelText: "Description",
                           labelStyle: TextStyle(fontSize: 15),
@@ -148,12 +165,35 @@ class _UserRegisterScreenState extends State<UserRegisterScreen> {
               const SizedBox(
                 height: 60,
               ),
-              ElevatedButton(onPressed: (){
-                _userRegisterController.createUser(createModel()).then((value) {
-                  showToast("Welcome");
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const UserDeciderScreen()));
-                });
-              }, child: const Text("Next"))
+              ElevatedButton(
+                  onPressed: () {
+                    if (widget.editModel != null) {
+                      var model = createModel();
+                      if(widget.editModel!.id != null) {
+                        model.id = widget.editModel!.id;
+                        _userRegisterController
+                            .updateUser(model)
+                            .then((value) {});
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (
+                                    context) => const NavigationScreen()));
+                      }
+                    } else {
+                      _userRegisterController
+                          .createUser(createModel())
+                          .then((value) {
+                        showToast("Welcome");
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const UserDeciderScreen()));
+                      });
+                    }
+                  },
+                  child:  Text(widget.editModel != null ? 'Update' : 'Next'))
             ],
           ),
         ),
@@ -166,11 +206,11 @@ class _UserRegisterScreenState extends State<UserRegisterScreen> {
         uid: FirebaseAuth.instance.currentUser?.uid ?? "",
         username: _userNameController.text,
         email: _emailController.text,
-    phonenumber: _phoneNumberController.text,
-    image: FirebaseAuth.instance.currentUser?.photoURL??"",
-      description: _descriptionController.text
-    );
+        phonenumber: _phoneNumberController.text,
+        image: FirebaseAuth.instance.currentUser?.photoURL ?? "",
+        description: _descriptionController.text);
   }
+
   void showToast(message) {
     Fluttertoast.showToast(
         msg: message,

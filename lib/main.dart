@@ -71,7 +71,7 @@ class _UserDeciderScreenState extends State<UserDeciderScreen> {
         child: Text("Please try again"),
       );
     } else if (user?.uid == null) {
-      return const UserRegisterScreen();
+      return  UserRegisterScreen();
     } else {
       return const NavigationScreen();
     }

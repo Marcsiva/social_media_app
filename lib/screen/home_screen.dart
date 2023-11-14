@@ -21,30 +21,55 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Text('Home'),
       ),
-      body: StreamBuilder<List<PostModel>>(
-        stream: _postController.fetchPost(
-            FirebaseAuth.instance.currentUser!.uid),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState ==
-              ConnectionState.waiting) {
-            return const Center(
-                child: CircularProgressIndicator());
-          }
-          if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(
-              child: Text('No projects available'),
-            );
-          }
-          return ListView.builder(
-              itemCount: snapshot.data!.length,
-              itemBuilder: (context, index) {
-                final post = snapshot.data![index];
-                return ListTile(
-                    title: Text(post.userName),
-                    trailing:Text(post.postContent));
-              });
-        },
-      ),
+      body:
+          StreamBuilder<List<PostModel>>(
+            stream: _postController
+                .fetchPost(FirebaseAuth.instance.currentUser?.uid?? ""),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              else if(snapshot.hasError){
+                return Center(child: Text('Error: ${snapshot.error}'));
+              }
+              else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return const Center(
+                  child: Text('No projects available'),
+                );
+              }
+              else {
+                return ListView.builder(
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, index) {
+                      PostModel post = snapshot.data![index];
+                      return ListTile(
+                          title: Container(
+                              color: Colors.orange,
+                              child: Text(post.postContent )),
+                          //trailing: Text(post.postContent)
+                      );
+                    });
+              }
+            },
+          ),
+          // Row(
+          //   children: [
+          //     Expanded(
+          //       child: Padding(
+          //         padding: const EdgeInsets.all(15.0),
+          //         child: TextFormField(
+          //           controller: _postTextController,
+          //           decoration: InputDecoration(
+          //             border: OutlineInputBorder(
+          //               borderRadius: BorderRadius.circular(15)
+          //             )
+          //           ),
+          //         ),
+          //       ),
+          //     ),
+          //     IconButton(onPressed: (){}, icon: const Icon(Icons.arrow_circle_up))
+          //   ],
+          // )
       // floatingActionButton: FloatingActionButton(
       //   onPressed: () {
       //     Navigator.push(

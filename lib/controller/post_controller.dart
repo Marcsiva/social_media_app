@@ -16,19 +16,19 @@ class PostController {
   Stream<List<PostModel>> fetchPost (String uid){
     return postCollection.where("uid",isEqualTo: uid).snapshots().map((snapshot) {
       return snapshot.docs.map((document) {
-        return PostModel.fromJson(document);
+        return PostModel.fromDoc(document);
       }).toList();
     });
   }
 
-  // Future<void> updatePost(PostModel model) async{
-  //   try{
-  //     await projectCollection.doc(model.id).update(model.toJson());
-  //   }
-  //   catch(e){
-  //     print('$e');
-  //   }
-  // }
+  Future<void> updatePost(PostModel model) async{
+    try{
+      await postCollection.doc(model.id).update(model.toJson());
+    }
+    catch(e){
+      print('$e');
+    }
+  }
 
   Future<void> deletePost(PostModel model) async{
     try{
