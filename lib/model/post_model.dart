@@ -6,28 +6,24 @@ class PostModel {
   String uid;
   String postContent;
   String userName;
+  Timestamp timestamp;
 
   PostModel(
       {this.id,
       required this.uid,
       required this.userName,
-      required this.postContent});
+      required this.postContent,
+      required this.timestamp});
   Map<String, dynamic> toJson() {
     return {
       'uid': uid,
       'id': id,
       'postContent': postContent,
-      'userName': userName
+      'userName': userName,
+      'timestamp':timestamp
     };
   }
-  //
-  // factory PostModel.fromDoc(QueryDocumentSnapshot<Map<String, dynamic>> doc) {
-  //   return PostModel(
-  //       uid: FirebaseAuth.instance.currentUser!.uid,
-  //       id: doc.id,
-  //       postContent: doc.get('postContent'),
-  //       userName: doc.get('userName'));
-  // }
+
   factory PostModel.fromDoc(QueryDocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
@@ -36,6 +32,7 @@ class PostModel {
       uid: data['uid'] ?? '',
       userName: data['userName'] ?? '',
       postContent: data['postContent'] ?? '',
+      timestamp: data['timestamp'] ?? '',
       // Include other fields as needed
     );
   }
