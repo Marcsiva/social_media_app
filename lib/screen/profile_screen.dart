@@ -82,34 +82,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   );
                 }
               }),
-          // Row(
-          //   children: [
-          //     Padding(
-          //       padding: const EdgeInsets.all(8.0),
-          //       child: Align(
-          //         alignment: Alignment.topLeft,
-          //           child: CircleAvatar(
-          //             radius: 30,
-          //             backgroundImage: NetworkImage(
-          //               FirebaseAuth.instance.currentUser?.photoURL ?? "",
-          //             ),
-          //           ),
-          //         ),
-          //       ),
-          //     const SizedBox(width: 5),
-          //     Column(
-          //       crossAxisAlignment: CrossAxisAlignment.start,
-          //       children: [
-          //         Text(FirebaseAuth.instance.currentUser?.displayName ??"",
-          //         style: const TextStyle(fontSize: 17,fontWeight:FontWeight.w500),),
-          //         const SizedBox(
-          //           height: 5,
-          //         ),
-          //         Text(FirebaseAuth.instance.currentUser?.email??"")
-          //       ],
-          //     )
-          //   ],
-          // ),
           const SizedBox(
             height: 20,
           ),

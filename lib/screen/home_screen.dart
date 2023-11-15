@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:social_media_app/utils/custom_formfield.dart';
 import '../controller/post_controller.dart';
 import '../model/post_model.dart';
 
@@ -38,12 +39,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     itemCount: snapshot.data!.length,
                     itemBuilder: (context, index) {
                       PostModel post = snapshot.data![index];
-                      return ListTile(
-                          title: Container(
-                              color: Colors.orange,
-                              child: Text(post.postContent )),
-                          //trailing: Text(post.postContent)
-                      );
+                      return CustomFormField(
+                          userName: post.userName,
+                          onTap: (){},
+                          postContent: post.postContent,
+                          likeOnPressed: (){},
+                          commentOnPressed: (){});
                     });
               }
             },
