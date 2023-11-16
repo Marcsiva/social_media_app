@@ -23,7 +23,7 @@ class UserController{
       await userCollection.doc(userData.id).update(userData.tojson());
     }
     catch(e){
-      print('$e');
+      print(e);
     }
   }
 

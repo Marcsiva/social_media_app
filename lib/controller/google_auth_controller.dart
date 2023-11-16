@@ -11,16 +11,16 @@ class AuthController {
   Future<User?> signInWithGoogle() async {
     try {
       final GoogleSignInAccount? googleSignInAccount =
-      await _googleSignIn.signIn();
+          await _googleSignIn.signIn();
       if (googleSignInAccount != null) {
         final GoogleSignInAuthentication googleSignInAuth =
-        await googleSignInAccount.authentication;
+            await googleSignInAccount.authentication;
         final AuthCredential credential = GoogleAuthProvider.credential(
           accessToken: googleSignInAuth.accessToken,
           idToken: googleSignInAuth.idToken,
         );
         final UserCredential authResult =
-        await _auth.signInWithCredential(credential);
+            await _auth.signInWithCredential(credential);
         final User? user = authResult.user;
         return user;
       }
@@ -33,9 +33,13 @@ class AuthController {
   }
 
   Future<void> signOut(context) async {
+    try{
     await _auth.signOut();
     await _googleSignIn.signOut();
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const LoginScreen()));
+        context, MaterialPageRoute(builder: (context) => const LoginScreen()));}
+        catch(e){
+      print(e);
+        }
   }
 }

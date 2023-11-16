@@ -1,10 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:social_media_app/Screen/login_screen.dart';
 import 'package:social_media_app/controller/google_auth_controller.dart';
 import 'package:social_media_app/controller/user_controller.dart';
 import 'package:social_media_app/model/user_model.dart';
 import 'package:social_media_app/screen/profile_register_screen.dart';
+
+import '../controller/theme_controller.dart';
+import '../theme/theme_provider.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -26,6 +30,53 @@ class _ProfileScreenState extends State<ProfileScreen> {
           style: TextStyle(
               color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
         ),
+        actions: [
+          PopupMenuButton(
+      shape: Border.all(width: 0.5),
+              onSelected: (value){
+        if(value == "Theme");
+              },
+              itemBuilder: (context){
+            return[
+              PopupMenuItem(
+                  child:Consumer<ThemeProvider>(builder: (context,themeProvider,child){
+                    return Tooltip(
+                      message: "Theme",
+                      child: ListTile(
+                        title: SizedBox(
+                          height: 40,
+                          child: Row(
+                            children: [
+                              Text(themeProvider.getTheme  == darkTheme? 'Dark Mode':'Light Mode'),
+                              const SizedBox(
+                                width: 50,
+                              ),
+                              Container(
+                                height: 30,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15),
+                                    border: Border.all(width: 0.6)
+                                ),
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.sunny,color: themeProvider.getTheme ==darkTheme? Colors.grey: Colors.amber,),
+                                    const SizedBox(width: 15,),
+                                    Icon(Icons.nights_stay,color: themeProvider.getTheme ==darkTheme ? Colors.blue: Colors.grey,)
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        onTap: (){
+                          themeProvider.toggleTheme();
+                        },
+                      ),
+                    );
+                  },) ),
+            ];
+          })
+        ],
       ),
       body: Column(
         children: [

@@ -6,28 +6,15 @@ import 'package:social_media_app/model/post_model.dart';
 class PostController {
 
   final postCollection = FirebaseFirestore.instance.collection('post');
+ // final likeCollection = FirebaseFirestore.instance.collection('like');
 
   Future<void> createPost (PostModel collect) async{
     await postCollection.doc(collect.id).set(collect.toJson());
   }
 
-  // Stream<List<PostModel>> fetchPost (String uid){
-  //   return postCollection.where("uid",isEqualTo: uid).snapshots().map((snapshot) {
-  //     return snapshot.docs.map((document) {
-  //       return PostModel.fromDoc(document);
-  //     }).toList();
-  //   });
-  // }
-  // Stream<List<PostModel>> fetchAllPosts() {
-  //   return postCollection.snapshots().map((snapshot) {
-  //     return snapshot.docs.map((document) {
-  //       return PostModel.fromDoc(document);
-  //     }).toList();
-  //   });
-  // }
   Stream<List<PostModel>> fetchAllPosts() {
     return postCollection
-        .orderBy('timestamp', descending: false)
+        .orderBy('timestamp', descending: true)
         .snapshots()
         .map((snapshot) {
       return snapshot.docs.map((document) {
@@ -38,7 +25,9 @@ class PostController {
 
   Future<void> updatePost(PostModel model) async{
     try{
-      await postCollection.doc(model.id).update(model.toJson());
+     DocumentReference docRef = postCollection.doc(model.id);
+
+     await docRef.update(model.toJson());
     }
     catch(e){
       print('$e');
@@ -53,4 +42,8 @@ class PostController {
       print('$e');
     }
   }
+
+  // Future<void> addLikes(LikeModel likeModel)async{
+  //   await likeCollection.doc(likeModel.id).set(likeModel.toJson());
+  // }
 }

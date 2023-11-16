@@ -167,20 +167,27 @@ class _UserRegisterScreenState extends State<UserRegisterScreen> {
               ),
               ElevatedButton(
                   onPressed: () {
-                    if (widget.editModel != null) {
-                      var model = createModel();
-                      if(widget.editModel!.id != null) {
-                        model.id = widget.editModel!.id;
-                        _userRegisterController
-                            .updateUser(model)
-                            .then((value) {});
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (
-                                    context) => const NavigationScreen()));
-                      }
-                    } else {
+                    // if (widget.editModel != null) {
+                    //   var model = createModel();
+                    //   if(widget.editModel!.id != null) {
+                    //     model.id = widget.editModel!.id;
+                    //     _userRegisterController
+                    //         .updateUser(model)
+                    //         .then((value) {});
+                    //     Navigator.push(
+                    //         context,
+                    //         MaterialPageRoute(
+                    //             builder: (
+                    //                 context) => const NavigationScreen()));
+                    //   }
+                    // }
+                    if(widget.editModel != null){
+                      _userRegisterController.updateUser(createModel()).then((value){
+
+                      });
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> const NavigationScreen()));
+                    }
+                    else {
                       _userRegisterController
                           .createUser(createModel())
                           .then((value) {
