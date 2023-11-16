@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:social_media_app/screen/profile_screen.dart';
 import 'package:social_media_app/utils/custom_formfield.dart';
 import '../controller/post_controller.dart';
 import '../model/post_model.dart';
@@ -30,77 +31,100 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Text('Home'),
         automaticallyImplyLeading: false,
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: StreamBuilder<List<PostModel>>(
-              stream: _postController.fetchAllPosts(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const Center(
-                    child: Text('No projects available'),
-                  );
-                } else {
-                  return ListView.builder(
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (context, index) {
-                        PostModel post = snapshot.data![index];
-                        return CustomFormField(
-                          onTap: () {},
-                          userName: post.userName ?? "",
-                          postContent: post.postContent ?? "",
-                          commentOnPressed: () {},
-                          postId: post.id ?? "",
-                          like: List<String>.from(post.like ?? []),
-                        );
-                      });
-                }
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: GestureDetector(
+              onTap:(){
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> const ProfileScreen()));
               },
-            ),
-          ),
-          Form(
-            key: _validateKey,
-            child: SizedBox(
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextFormField(
-                        controller: _descriptionController,
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            hintText: "write something "),
-                      ),
-                    ),
-                  ),
-                  IconButton(
-                      onPressed: () {
-                        setState(() {
-                          _postController
-                              .createPost(createModel())
-                              .then((value) {
-                            showToast('successfully added');
-                          }).catchError((error) {
-                            showToast('$error');
-                          });
-
-                          _descriptionController.text = '';
-                        });
-                      },
-                      icon: const Icon(Icons.send))
-                ],
+              child: CircleAvatar(
+                radius: 19,
+                backgroundImage: NetworkImage(
+                  FirebaseAuth.instance.currentUser?.photoURL??""
+                ),
               ),
             ),
-          ),
+          )
         ],
+      ),
+      body: GestureDetector(
+        onTap: (){
+          setState(() {
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+          });
+        },
+        child: Column(
+          children: [
+            Expanded(
+              child: StreamBuilder<List<PostModel>>(
+                stream: _postController.fetchAllPosts(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return const Center(
+                      child: Text('No projects available'),
+                    );
+                  } else {
+                    return ListView.builder(
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, index) {
+                          PostModel post = snapshot.data![index];
+                          return CustomFormField(
+                            onTap: () {},
+                            userName: post.userName,
+                            postContent: post.postContent,
+                            postId: post.id ?? "",
+                            count: post.like.length.toString(),
+
+                          );
+                        });
+                  }
+                },
+              ),
+            ),
+            Form(
+              key: _validateKey,
+              child: SizedBox(
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextFormField(
+                          controller: _descriptionController,
+                          decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              hintText: "write something "),
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                        onPressed: () {
+                          setState(() {
+                            _postController
+                                .createPost(createModel())
+                                .then((value) {
+                              showToast('successfully added');
+                            }).catchError((error) {
+                              showToast('$error');
+                            });
+
+                            _descriptionController.text = '';
+                          });
+                        },
+                        icon: const Icon(Icons.send))
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -119,6 +143,8 @@ class _HomeScreenState extends State<HomeScreen> {
       userName: FirebaseAuth.instance.currentUser?.displayName ?? "",
       timestamp: Timestamp.now(),
       like: [],
+      comments: [],
     );
   }
+
 }

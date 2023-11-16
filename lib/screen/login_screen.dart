@@ -29,7 +29,6 @@ class _LoginScreenState extends State<LoginScreen> {
           const Text(
             "Welcome,",
             style: TextStyle(
-              color: Colors.black,
               fontWeight: FontWeight.bold,
               fontSize: 30,
             ),
@@ -70,38 +69,11 @@ class _LoginScreenState extends State<LoginScreen> {
             height: 20,
           ),
           const Text(
-            "By sign in your account,",
+            "By sign in your account",
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.grey,
             ),
-          ),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text(
-                'You are agreeing to our',
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                  color: Colors.grey,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 3.0),
-                child: TextButton(
-                  onPressed: () {},
-                  style: TextButton.styleFrom(
-                    backgroundColor: Colors.transparent,
-                    padding: EdgeInsets.zero,
-                  ),
-                  child: const Text(
-                    'TERMS AND POLICY',
-                    style: TextStyle(
-                        color: Colors.blue, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
-            ],
           ),
         ],
       ),

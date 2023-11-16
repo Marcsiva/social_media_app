@@ -24,22 +24,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme:  Theme.of(context).iconTheme,
+        actionsIconTheme: Theme.of(context).iconTheme,
         forceMaterialTransparency: true,
         title: const Text(
           'Profile',
           style: TextStyle(
-              color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
+               fontSize: 20, fontWeight: FontWeight.bold),
         ),
         actions: [
           PopupMenuButton(
       shape: Border.all(width: 0.5),
               onSelected: (value){
-        if(value == "Theme");
+        if(value == "Theme"){
+
+        }else if(value == "signout"){
+          _authController.signOut(context);
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const LoginScreen()));
+        }
               },
+              icon: Icon(Icons.menu,color:Theme.of(context).primaryColor,),
               itemBuilder: (context){
             return[
               PopupMenuItem(
-                  child:Consumer<ThemeProvider>(builder: (context,themeProvider,child){
+                  child:Consumer<ThemeProvider>(
+                    builder: (context,themeProvider,child){
                     return Tooltip(
                       message: "Theme",
                       child: ListTile(
@@ -74,6 +86,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     );
                   },) ),
+              PopupMenuItem(
+                value: 'signout',
+                  child:ListTile(
+                    title: const Text("signout"),
+                    trailing: const Icon(Icons.logout_outlined),
+                    onTap: () {
+                      setState(() {
+                        _authController.signOut(context);
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const LoginScreen()));
+                      });
+                    },
+                  ))
             ];
           })
         ],

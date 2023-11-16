@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:social_media_app/Screen/home_screen.dart';
 import 'package:social_media_app/controller/navigation_controller.dart';
 import 'package:social_media_app/controller/user_controller.dart';
 import 'package:social_media_app/firebase_options.dart';
@@ -86,7 +88,7 @@ class _UserDeciderScreenState extends State<UserDeciderScreen> {
     } else if (user?.uid == null) {
       return  UserRegisterScreen();
     } else {
-      return const NavigationScreen();
+      return const HomeScreen();
     }
   }
 }

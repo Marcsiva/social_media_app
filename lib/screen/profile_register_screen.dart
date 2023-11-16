@@ -3,6 +3,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:social_media_app/Screen/home_screen.dart';
 import 'package:social_media_app/controller/navigation_controller.dart';
 import 'package:social_media_app/controller/user_controller.dart';
 import 'package:social_media_app/main.dart';
@@ -26,6 +27,7 @@ class _UserRegisterScreenState extends State<UserRegisterScreen> {
 
   @override
   void initState() {
+    showToast("Welcome");
     if (widget.editModel != null) {
       var userEditModel = widget.editModel!;
       _userNameController.text = userEditModel.username;
@@ -185,7 +187,7 @@ class _UserRegisterScreenState extends State<UserRegisterScreen> {
                       _userRegisterController.updateUser(createModel()).then((value){
 
                       });
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> const NavigationScreen()));
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> const HomeScreen()));
                     }
                     else {
                       _userRegisterController

@@ -1,61 +1,36 @@
 // ignore_for_file: must_be_immutable
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:social_media_app/utils/custom_comment_button.dart';
 import 'package:social_media_app/utils/like_button.dart';
 
 class CustomFormField extends StatefulWidget {
-  //void Function()? likeOnPressed;
-  void Function()? commentOnPressed;
+
   void Function()? onTap;
   String postId;
   String userName;
   String postContent;
-  List<String> like;
+  String count;
   CustomFormField(
       {super.key,
       required this.userName,
       required this.onTap,
       required this.postContent,
       required this.postId,
-        required this.like,
       // required this.likeOnPressed,
-      required this.commentOnPressed});
+      required this.count,
+
+      });
 
   @override
   State<CustomFormField> createState() => _CustomFormFieldState();
 }
 
 class _CustomFormFieldState extends State<CustomFormField> {
-
   final currentUser = FirebaseAuth.instance.currentUser!;
-  bool isLiked = false;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    isLiked = widget.like.contains(currentUser.email);
-  }
-
-  void toggleLike (){
-    setState(() {
-      isLiked= !isLiked;
-    });
-    DocumentReference postRef = FirebaseFirestore.instance.collection('post').doc(widget.postId);
-    if(isLiked){
-      postRef.update({
-        'like':FieldValue.arrayUnion([currentUser.email])
-      });
-    }
-    else{
-      postRef.update({
-        'like': FieldValue.arrayRemove([currentUser.email])
-      });
-    }
-  }
+  //final TextEditingController _commentController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -93,8 +68,8 @@ class _CustomFormFieldState extends State<CustomFormField> {
             Center(
               child: Container(
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                   ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
                 //height: 50,
                 width: MediaQuery.of(context).size.width * 0.9,
                 child: Align(
@@ -110,11 +85,11 @@ class _CustomFormFieldState extends State<CustomFormField> {
                     // ),
                     child: ExpandableText(
                       widget.postContent,
-                    expandText: 'Read more',
-                    collapseText: 'Read less',
-                    maxLines: 3,
-                    linkColor: Colors.blue,
-                  ),
+                      expandText: 'Read more',
+                      collapseText: 'Read less',
+                      maxLines: 3,
+                      linkColor: Colors.blue,
+                    ),
                   ),
                 ),
               ),
@@ -122,16 +97,93 @@ class _CustomFormFieldState extends State<CustomFormField> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                // IconButton(onPressed: likeOnPressed, icon: const Icon(Icons.favorite)),
-                LikeButton(isLike: isLiked, onTap:toggleLike),
-                IconButton(
-                    onPressed: widget.commentOnPressed,
-                    icon: const Icon(Icons.comment)),
+                Column(
+                  children: [
+                    LikeButtonView(
+                      postId: widget.postId,
+                      //userId: widget.userName,
+                      currentUserId: FirebaseAuth.instance.currentUser!.uid,
+                    ),
+                    Text(widget.count)
+                  ],
+                ),
+                CustomCommentButton(postId: widget.postId, userName: widget.userName,)
               ],
             )
           ],
         ),
+
       ),
     );
   }
+  // void showSnackBar(BuildContext context) {
+  //   final snackBar = SnackBar(
+  //     content:Container(
+  //       height: MediaQuery.of(context).size.height * 0.5,
+  //       width: MediaQuery.of(context).size.width * 1.0,
+  //       child: Column(
+  //         children: [
+  //           Expanded(
+  //             child: FutureBuilder<List<String>>(
+  //               future: PostController().getComments(widget.postId),
+  //               builder: (context, snapshot) {
+  //                 if (snapshot.connectionState == ConnectionState.waiting) {
+  //                   return const CircularProgressIndicator();
+  //                 }
+  //
+  //                 if (!snapshot.hasData || snapshot.data!.isEmpty) {
+  //                   return Text('No comments yet.');
+  //                 }
+  //
+  //                 List<String> comments = snapshot.data!;
+  //
+  //                 // return Column(
+  //                 //   crossAxisAlignment: CrossAxisAlignment.start,
+  //                 //   children: comments.map((comment) => Text(comment)).toList(),
+  //                 // );
+  //                 return Container(
+  //                   child:Text(
+  //                     comments as String
+  //                   )
+  //                 );
+  //               },
+  //             ),
+  //           ),
+  //           Form(
+  //             child: Row(
+  //               children: [
+  //                 TextFormField(
+  //                   controller: _commentController,
+  //                   decoration: InputDecoration(
+  //                     border:OutlineInputBorder(
+  //                       borderRadius: BorderRadius.circular(15)
+  //                     )
+  //                   ),
+  //                 ),
+  //                 IconButton(
+  //                     onPressed: () {
+  //                       if(_commentController.text.isNotEmpty){
+  //                         PostController().addComment(widget.postId, _commentController.text);
+  //                       }
+  //                       _commentController.clear();
+  //                     },
+  //                     icon: const Icon(Icons.send))
+  //               ],
+  //             ),
+  //           )
+  //         ],
+  //       ),
+  //     ),
+  //     duration: const Duration(minutes: 2),
+  //   );
+  //
+  //   // Display the SnackBar
+  //   ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  // }
+  // void showToast(message) {
+  //   Fluttertoast.showToast(
+  //       msg: message,
+  //       gravity: ToastGravity.SNACKBAR,
+  //       backgroundColor: Colors.grey);
+  // }
 }
