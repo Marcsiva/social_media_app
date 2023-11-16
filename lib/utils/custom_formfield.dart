@@ -44,26 +44,13 @@ class _CustomFormFieldState extends State<CustomFormField> {
           children: [
             Padding(
               padding: const EdgeInsets.all(6.0),
-              child: Row(
-                children: [
-                  CircleAvatar(
-                    radius: 15,
-                    backgroundImage: NetworkImage(
-                      FirebaseAuth.instance.currentUser?.photoURL ?? "",
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  GestureDetector(
+                  child: GestureDetector(
                     onTap: widget.onTap,
                     child: Text(
-                      widget.userName,
+                      '@${widget.userName}',
                       style: const TextStyle(color: Colors.grey),
                     ),
-                  ),
-                ],
-              ),
+                  )
             ),
             Center(
               child: Container(

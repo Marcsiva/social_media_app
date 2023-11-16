@@ -27,7 +27,8 @@ class _CustomCommentState extends State<CustomComment> {
             padding: const EdgeInsets.all(8.0),
             child: Align(
                 alignment: Alignment.topLeft,
-                child: Text('@${widget.userName}')),
+                child: Text('@${widget.userName}',
+                  style: TextStyle(color: Colors.blue),)),
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 8,left: 8,right: 8,top: 0),

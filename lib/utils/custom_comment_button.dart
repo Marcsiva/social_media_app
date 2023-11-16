@@ -16,6 +16,7 @@ class CustomCommentButton extends StatefulWidget {
 
 class _CustomCommentButtonState extends State<CustomCommentButton> {
   final TextEditingController _commentController = TextEditingController();
+  final GlobalKey<FormState> _validateKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return IconButton(
@@ -24,7 +25,7 @@ class _CustomCommentButtonState extends State<CustomCommentButton> {
 
   void CommentSnackBar() {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         duration: const Duration(minutes: 2),
         content: Column(
           children: [
@@ -32,8 +33,8 @@ class _CustomCommentButtonState extends State<CustomCommentButton> {
               setState(() {
                 ScaffoldMessenger.of(context).hideCurrentSnackBar();
               });
-            }, icon:  const Icon(Icons.arrow_drop_down_circle_outlined,
-            color: Colors.white,)),
+            }, icon:   Icon(Icons.arrow_drop_down_circle_outlined,
+            color: Theme.of(context).primaryColor,)),
             Container(
               height: MediaQuery.of(context).size.height * 0.5,
               width: MediaQuery.of(context).size.width * 1.0,
@@ -68,28 +69,50 @@ class _CustomCommentButtonState extends State<CustomCommentButton> {
             ),
             Row(
               children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      controller: _commentController,
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15))),
+                Form(
+                  key: _validateKey,
+                  child: Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                        style: const TextStyle(color:Colors.black ),
+                        controller: _commentController,
+                        decoration: InputDecoration(
+                          hintText: 'write a comment...',
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                            borderSide: const BorderSide(color: Colors.blue),),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: const BorderSide(color: Colors.blue),),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: const BorderSide(color: Colors.blue),)),
+                        validator: (value){
+                          if(value!.isEmpty){
+                            return 'enter the proper comment';
+                          }
+                          return null;
+                        },
+                      ),
                     ),
                   ),
                 ),
                 IconButton(
                     onPressed: () async {
-                      try {
-                        await PostController()
-                            .addComment(widget.postId, _commentController.text);
-                      } catch (e) {
-                        print('$e');
+                      if (_validateKey.currentState!.validate()) {
+                        try {
+                          await PostController()
+                              .addComment(
+                              widget.postId, _commentController.text);
+                        } catch (e) {
+                          print('$e');
+                        }
+                        _commentController.clear();
                       }
-                      _commentController.clear();
-                    },
-                    icon: const Icon(Icons.send))
+
+                    } ,                  icon:  Icon(Icons.send,
+                    color: Colors.blue.shade900))
               ],
             ),
           ],

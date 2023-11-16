@@ -5,8 +5,6 @@ import 'package:social_media_app/Screen/login_screen.dart';
 import 'package:social_media_app/controller/google_auth_controller.dart';
 import 'package:social_media_app/controller/user_controller.dart';
 import 'package:social_media_app/model/user_model.dart';
-import 'package:social_media_app/screen/profile_register_screen.dart';
-
 import '../controller/theme_controller.dart';
 import '../theme/theme_provider.dart';
 
@@ -27,10 +25,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
         iconTheme:  Theme.of(context).iconTheme,
         actionsIconTheme: Theme.of(context).iconTheme,
         forceMaterialTransparency: true,
-        title: const Text(
+        title:  Text(
           'Profile',
           style: TextStyle(
-               fontSize: 20, fontWeight: FontWeight.bold),
+               fontSize: 20, fontWeight: FontWeight.bold,
+          color: Theme.of(context).primaryColor),
         ),
         actions: [
           PopupMenuButton(
@@ -120,62 +119,166 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   return const Center(child: Text('User not found'));
                 } else {
                   UserModel user = snapshot.data!;
-                  return Column(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        UserRegisterScreen(editModel: user)));
-                          });
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            children: [
-                              CircleAvatar(
-                                radius: 30,
-                                backgroundImage: NetworkImage(FirebaseAuth
-                                        .instance.currentUser?.photoURL ??
-                                    ""),
-                              ),
-                              const SizedBox(
-                                width: 15,
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(user.username),
-                                  Text(user.description as String)
-                                ],
-                              )
-                            ],
+                  return SingleChildScrollView(
+                    child: Form(
+                      child: Column(
+                        //crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(
+                            height: 50,
                           ),
-                        ),
-                      )
-                    ],
+                          Center(
+                            child: CircleAvatar(
+                              radius: 50,
+                              backgroundImage: NetworkImage(
+                                  FirebaseAuth.instance.currentUser?.photoURL ?? ""),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          //const Text("User Name",style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500),),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  Icons.person,
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Expanded(
+                                  flex: 3,
+                                  child:Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      const Text('User Name',style: TextStyle(color: Colors.grey),),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Container(
+                                        decoration:  BoxDecoration(
+                                          border:Border(bottom:BorderSide(width: 1,
+                                              color: Theme.of(context).primaryColor) )
+                                        ),
+                                        width: MediaQuery.of(context).size.width*0.8,
+                                        child: Text(user.username,
+                                        style: const TextStyle(fontWeight: FontWeight.w500,
+                                        fontSize: 17),),
+                                      ),
+                                    ],
+                                  )
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                const Icon(Icons.mail),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Expanded(
+                                  flex: 3,
+                                  child:Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      const Text('Email',style: TextStyle(color: Colors.grey),),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Container(
+                                        width: MediaQuery.of(context).size.width*0.8,
+                                        decoration:  BoxDecoration(
+                                            border:Border(bottom:BorderSide(width: 1,
+                                                color: Theme.of(context).primaryColor) )
+                                        ),
+                                        child: Text(user.email,
+                                          style: const TextStyle(fontWeight: FontWeight.w500,
+                                              fontSize: 17),),
+                                      ),
+                                    ],
+                                  )
+                                )
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                const Icon(Icons.phone),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Expanded(
+                                  flex: 3,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      const Text('Phone Number',style: TextStyle(color: Colors.grey),),
+                                      const SizedBox(height: 5,),
+                                      Container(
+                                        width: MediaQuery.of(context).size.width*0.8,
+                                        decoration:  BoxDecoration(
+                                            border:Border(bottom:BorderSide(width: 1,
+                                            color: Theme.of(context).primaryColor) )
+                                        ),
+                                        child: Text(user.phonenumber,
+                                          style: const TextStyle(fontWeight: FontWeight.w500,
+                                              fontSize: 17),),
+                                      ),
+                                    ],
+                                  )
+                                )
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                const Icon(Icons.help),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Expanded(
+                                  flex: 3,
+                                  child:Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      const Text('Description',style: TextStyle(color: Colors.grey),),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Container(
+                                        width: MediaQuery.of(context).size.width*0.8,
+                                        decoration:  BoxDecoration(
+                                            border:Border(bottom:BorderSide(width: 1,
+                                                color: Theme.of(context).primaryColor) )
+                                        ),
+                                        child: Text(user.description,
+                                          style: const TextStyle(fontWeight: FontWeight.w500,
+                                              fontSize: 17),),
+                                      ),
+                                    ],
+                                  )
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   );
                 }
               }),
           const SizedBox(
             height: 20,
           ),
-          ListTile(
-            title: const Text("signout"),
-            trailing: const Icon(Icons.logout_outlined),
-            onTap: () {
-              setState(() {
-                _authController.signOut(context);
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const LoginScreen()));
-              });
-            },
-          )
         ],
       ),
     );

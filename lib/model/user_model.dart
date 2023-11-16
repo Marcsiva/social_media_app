@@ -11,7 +11,7 @@ class UserModel{
   String username;
   String email;
   String? image;
-  String? description;
+  String description;
   String phonenumber;
 
 
@@ -21,7 +21,7 @@ class UserModel{
     required this.username,
     required this.email,
      this.image,
-     this.description,
+     required this.description,
     required this.phonenumber
   });
   factory UserModel.fromJson(Map<String,dynamic> json) => _$UserModelFromJson(json);
